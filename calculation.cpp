@@ -1,6 +1,6 @@
 #include <math.h>
-#include "sphere.h"
 #include "constant.h"
+#include "calculation.h"
 
 float biot(float h, float k, float x){
 	return h*x/k;
@@ -26,7 +26,7 @@ float lumped_cap_at_time(Geometry g, float density, float h, float c, float time
 	float vol = g.getVolumn();
 	float surface_area = g.getSurfaceArea();
 
-	float theta = exp(-h*surface_area*time/(density*volumn*c));
+	float theta = exp(-h*surface_area*time/(density*vol*c));
 	return theta*(t_init-t_inf)+t_inf;
 }
 
@@ -52,16 +52,17 @@ void sphere_one_term_at_time(vector<float>* ret, float fourier, float biot, vect
     }
 }
 
-float semi_infinite_at_time_at_point(float x, float alpha, float t, float h, float k, float t_init, float t_inf){
+float semi_infinite_at_time_at_point(float x, float alpha, float time, float h, float k, float t_init, float t_inf){
     float y = sqrt(alpha*time);
     float z = x/(2*y);
     float theta = erfc(z) - exp(h*x/k + h*h*alpha*time/(k*k))*erfc(z+h*y/k);
     return theta*(t_init-t_inf)+t_inf;
 }
 
-vector<float> semi_infinite_at_time(vector<float>* ret, vector<float>& points, float alpha, float t, float h, float k, float t_init, float t_inf){
+vector<float> semi_infinite_at_time(vector<float>* ret, vector<float>& points, float alpha, float time, float h, float k, float t_init, float t_inf){
     float y = sqrt(alpha*time);
     float z = h*h*alpha*time/(k*k);
+    float diff = t_init-t_inf;
     int i = 0;
     for(auto it = points.begin(); it != points.end(); ++it, ++i){
         float x = *it;
