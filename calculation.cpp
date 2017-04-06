@@ -1,7 +1,6 @@
-#include "sphere.h"
 #include <math.h>
-
-using namespace std;
+#include "sphere.h"
+#include "constant.h"
 
 float biot(float h, float k, float x){
 	return h*x/k;
