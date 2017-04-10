@@ -1,6 +1,6 @@
 #include <math.h>
 #include <iostream>
-#include "calculation.h"
+#include "sphere.h"
 
 int main(){
     float radius;

@@ -1,10 +1,8 @@
 #include "sphere.h"
 
-float PI = 3.14159265;
-
 Sphere::Sphere(float radius){
 		_radius = radius;
-	}
+}
 
 Sphere::~Sphere(){}
 
