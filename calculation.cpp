@@ -2,7 +2,6 @@
 #include <tr1/cmath>
 #include "constant.h"
 #include "calculation.h"
-#include <cmath>
 
 extern const float PI = 3.14159265;
 
