@@ -5,6 +5,10 @@
 #include "sphere.h"
 #include "planewall.h"
 #include "infinitecylinder.h"
+#include "rectangularparallelepiped.h"
+#include "cylinder.h"
+#include "infiniterectangularbar.h"
+#include "semiinfiniteplate.h"
 
 extern const float PI = 3.14159265;
 
@@ -355,4 +359,58 @@ float temp_at_time_at_point(InfiniteCylinder cylinder, string mat, string envmat
     //semi-infinite approximation
     
     return semi_infinite_at_time_at_point(r0-r, alpha, time, h, k, t_init, t_inf); 
+}
+
+float temp_at_time_at_point(RectangularParallelepiped rp, string mat, string envmat, 
+    float x1, float x2, float x3, float time, float t_init, float t_inf){
+    PlaneWall pl1 = PlaneWall(rp.getL1());
+    PlaneWall pl2 = PlaneWall(rp.getL2());
+    PlaneWall pl3 = PlaneWall(rp.getL3());
+    float t1 = temp_at_time_at_point(pl1, mat, envmat, x1, time, t_init, t_inf);
+    float t2 = temp_at_time_at_point(pl2, mat, envmat, x2, time, t_init, t_inf);
+    float t3 = temp_at_time_at_point(pl3, mat, envmat, x3, time, t_init, t_inf);
+    float theta1 = (t1-t_inf)/(t_init-t_inf);
+    float theta2 = (t2-t_inf)/(t_init-t_inf);
+    float theta3 = (t3-t_inf)/(t_init-t_inf);
+    return theta1*theta2*theta3*(t_init-t_inf)+t_inf;
+}
+
+float temp_at_time_at_point(Cylinder cylinder, string mat, string envmat, 
+    float r, float x, float time, float t_init, float t_inf){
+    InfiniteCylinder ic = InfiniteCylinder(cylinder.getRadius());
+    PlaneWall pl = PlaneWall(cylinder.getL());
+    float t1 = temp_at_time_at_point(ic, mat, envmat, r, time, t_init, t_inf);
+    float t2 = temp_at_time_at_point(pl, mat, envmat, x, time, t_init, t_inf);
+    float theta1 = (t1-t_inf)/(t_init-t_inf);
+    float theta2 = (t2-t_inf)/(t_init-t_inf);
+    return theta1*theta2*(t_init-t_inf)+t_inf;
+}
+
+float temp_at_time_at_point(InfiniteRectangularBar irb, string mat, string envmat, 
+    float x1, float x2, float time, float t_init, float t_inf){
+    PlaneWall pl1 = PlaneWall(irb.getL1());
+    PlaneWall pl2 = PlaneWall(irb.getL2());
+    float t1 = temp_at_time_at_point(pl1, mat, envmat, x1, time, t_init, t_inf);
+    float t2 = temp_at_time_at_point(pl2, mat, envmat, x2, time, t_init, t_inf);
+    float theta1 = (t1-t_inf)/(t_init-t_inf);
+    float theta2 = (t2-t_inf)/(t_init-t_inf);
+    return theta1*theta2*(t_init-t_inf)+t_inf;
+}
+
+float temp_at_time_at_point(SemiInfinitePlate sip, string mat, string envmat, 
+    float x1, float x2, float time, float t_init, float t_inf){
+    float h = get_h(envmat);
+    float k = get_k(mat, t_init);
+    float density = get_density(mat);
+    float c = get_c(mat, t_init);
+    float alpha = calculate_alpha(k, density, c);
+    float t1 = semi_infinite_at_time_at_point(x1, alpha, time, h, k, t_init, t_inf); 
+
+    PlaneWall pl = PlaneWall(sip.getL());
+    float t2 = temp_at_time_at_point(pl, mat, envmat, x2, time, t_init, t_inf);
+
+    float theta1 = (t1-t_inf)/(t_init-t_inf);
+    float theta2 = (t2-t_inf)/(t_init-t_inf);
+
+    return theta1*theta2*(t_init-t_inf)+t_inf;
 }
