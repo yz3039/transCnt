@@ -2,8 +2,11 @@
 #include <tr1/cmath>
 #include "constant.h"
 #include "calculation.h"
+#include <iostream>
 
 extern const float PI = 3.14159265;
+float RATIO = 0.003;
+float PRECESION = 0.001;
 
 float biot(float h, float k, float x){
 	return h*x/k;
@@ -24,14 +27,14 @@ float cylinder_solve_for_zeta(float biot, int n){
 float planewall_solve_for_zeta(float biot, int n){
     // [0, pi/2] [pi*(n-3/2), pi*(n-1/2)]
     //ζtan(ζ) = Bi
-    float min = n==1? 0:(n-3/2)*PI;
-    float max = (n-1/2)*PI;
+    float min = n==1? 0:(n-1.5)*PI;
+    float max = (n-0.5)*PI;
     float x;
     float fx;
     while(true){
         x = (min+max)/2;
         fx = x*tan(x);
-        if(abs(fx-biot)<0.001) return x;
+        if(abs(fx-biot)<PRECESION) return x;
         if(fx<biot) min = x;
         else max = x;
     }
@@ -51,7 +54,7 @@ float sphere_solve_for_zeta(float biot, int n){
     while(true){
         x = (min+max)/2;
         fx = x/tan(x);
-        if(abs(fx-rh)<0.001) return x;
+        if(abs(fx-rh)<PRECESION) return x;
         if(fx<rh) max = x;
         else min = x;
     }
@@ -84,7 +87,7 @@ float infinitecylinder_one_term_at_time_at_point(float fourier, float biot, floa
     return theta*(t_init-t_inf)+t_inf;
 }
 
-float planewall_one_term_at_time_at_point(float fourier, float biot, float L, float x, float t_init, float t_inf){
+float planewall_one_term_at_time_at_point(float fourier, float biot, float x, float L, float t_init, float t_inf){
     float zeta = planewall_solve_for_zeta(biot,1);
     float c1 = 4.0f*sin(zeta)/(2.0f*zeta+sin(2.0f*zeta));
     float theta = c1*exp(-zeta*zeta*fourier)*cos(zeta*x/L);
@@ -114,7 +117,7 @@ float infinitecylinder_multiple_term_at_time_at_point(float fourier, float biot,
         c_n = 2*j0/(zeta_n*(j0*j0+j1*j1));
         if(n>1){
             float ratio = abs(c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier)));
-            if(ratio < 0.01) break;
+            if(ratio < RATIO) break;
         }
         theta += c_n*exp(-zeta_n*zeta_n*fourier)*std::tr1::cyl_bessel_j(0, zeta_n*r/r0);
         n += 1;
@@ -122,7 +125,7 @@ float infinitecylinder_multiple_term_at_time_at_point(float fourier, float biot,
     return theta*(t_init-t_inf)+t_inf;
 }
 
-float planewall_multiple_term_at_time_at_point(float fourier, float biot, float L, float x, float t_init, float t_inf){
+float planewall_multiple_term_at_time_at_point(float fourier, float biot, float x, float L, float t_init, float t_inf){
     float theta = 0;
     int n = 1;
     float zeta_n, zeta_n_1, c_n, c_n_1;
@@ -135,7 +138,7 @@ float planewall_multiple_term_at_time_at_point(float fourier, float biot, float 
         c_n = 4.0f*sin(zeta_n)/(2.0f*zeta_n+sin(2.0f*zeta_n));
         if(n>1){
             float ratio = abs(c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier)));
-            if(ratio < 0.01) break;
+            if(ratio < RATIO) break;
         }
         theta += c_n*exp(-zeta_n*zeta_n*fourier)*cos(zeta_n*x/L);
         n += 1;
@@ -144,6 +147,7 @@ float planewall_multiple_term_at_time_at_point(float fourier, float biot, float 
 }
 
 float sphere_multiple_term_at_time_at_point(float fourier, float biot, float r, float r0, float t_init, float t_inf){
+    // std::cout << biot << std::endl;
     float theta = 0;
     int n = 1;
     float zeta_n, zeta_n_1, c_n, c_n_1;
@@ -153,10 +157,12 @@ float sphere_multiple_term_at_time_at_point(float fourier, float biot, float r, 
             c_n_1 = c_n;
         }
         zeta_n = sphere_solve_for_zeta(biot, n);
+        // std::cout << zeta_n << std::endl;
         c_n = 4.0f*(sin(zeta_n)-zeta_n*cos(zeta_n))/(2.0f*zeta_n-sin(2.0f*zeta_n));
+        // std::cout << c_n << std::endl;
         if(n>1){
             float ratio = abs(c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier)));
-            if(ratio < 0.01) break;
+            if(ratio < RATIO) break;
         }
         float temp = zeta_n*r/r0;
         theta += c_n*exp(-zeta_n*zeta_n*fourier)*(1/temp)*sin(temp);
