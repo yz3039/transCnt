@@ -2,6 +2,7 @@
 #include <tr1/cmath>
 #include "constant.h"
 #include "calculation.h"
+#include <cmath>
 
 extern const float PI = 3.14159265;
 
@@ -113,7 +114,7 @@ float infinitecylinder_multiple_term_at_time_at_point(float fourier, float biot,
         j1 = std::tr1::cyl_bessel_j(1,zeta_n);
         c_n = 2*j0/(zeta_n*(j0*j0+j1*j1));
         if(n>1){
-            float ratio = c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier));
+            float ratio = abs(c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier)));
             if(ratio < 0.01) break;
         }
         theta += c_n*exp(-zeta_n*zeta_n*fourier)*std::tr1::cyl_bessel_j(0, zeta_n*r/r0);
@@ -134,7 +135,7 @@ float planewall_multiple_term_at_time_at_point(float fourier, float biot, float 
         zeta_n = planewall_solve_for_zeta(biot, n);
         c_n = 4.0f*sin(zeta_n)/(2.0f*zeta_n+sin(2.0f*zeta_n));
         if(n>1){
-            float ratio = c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier));
+            float ratio = abs(c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier)));
             if(ratio < 0.01) break;
         }
         theta += c_n*exp(-zeta_n*zeta_n*fourier)*cos(zeta_n*x/L);
@@ -155,7 +156,7 @@ float sphere_multiple_term_at_time_at_point(float fourier, float biot, float r, 
         zeta_n = sphere_solve_for_zeta(biot, n);
         c_n = 4.0f*(sin(zeta_n)-zeta_n*cos(zeta_n))/(2.0f*zeta_n-sin(2.0f*zeta_n));
         if(n>1){
-            float ratio = c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier));
+            float ratio = abs(c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier)));
             if(ratio < 0.01) break;
         }
         float temp = zeta_n*r/r0;
