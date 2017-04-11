@@ -1,4 +1,5 @@
-#include "calculation.h"
+#ifndef SPHERE_H
+#define SPHERE_H
 
 class Sphere{
 	float _radius;
@@ -6,7 +7,7 @@ class Sphere{
 public:
 	Sphere(float radius);
 	~Sphere();
-	float getSurfaceArea();
-	float getVolumn();
 	float getRadius();
 };
+
+#endif

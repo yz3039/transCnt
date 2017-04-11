@@ -1,3 +1,6 @@
+#ifndef SEMIINFINITEPLATE_H
+#define SEMIINFINITEPLATE_H
+
 class SemiInfinitePlate{
 	float _L;
 public:
@@ -5,3 +8,5 @@ public:
 	~SemiInfinitePlate();
 	float getL();
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef INFINITECYLINDER_H
+#define INFINITECYLINDER_H
+
 class InfiniteCylinder{
 	float _radius;
 public:
@@ -5,3 +8,5 @@ public:
 	~InfiniteCylinder();
 	float getRadius();
 };
+
+#endif

@@ -1,6 +1,6 @@
 #include <math.h>
 #include <iostream>
-#include "sphere.h"
+#include "calculation.h"
 
 int main(){
     float radius;
@@ -20,4 +20,17 @@ int main(){
     
     cout << output << endl;
     //assert( abs(output-result) < 0.01 );
+
+
+    PlaneWall pl = PlaneWall(0.001);
+    output = temp_at_time_at_point(pl, mat, envmat, 0.0005, 10, t_init, t_inf);
+    cout << output << endl;
+
+    InfiniteCylinder ic = InfiniteCylinder(0.001);
+    output = temp_at_time_at_point(ic, mat, envmat, 0.0005, 10, t_init, t_inf);
+    cout << output << endl;
+
+    Sphere s2 = Sphere(0.001);
+    output = temp_at_time_at_point(s2, mat, envmat, 0.0005, 5, t_init, t_inf);
+    cout << output << endl;
 }

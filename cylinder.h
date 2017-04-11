@@ -1,3 +1,6 @@
+#ifndef CYLINDER_H
+#define CYLINDER_H
+
 class Cylinder{
 	float _radius;
 	float _L;
@@ -7,3 +10,5 @@ public:
 	float getRadius();
 	float getL();
 };
+
+#endif

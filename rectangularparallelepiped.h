@@ -1,3 +1,6 @@
+#ifndef RECTANGULARPARALLELEPIPED_H
+#define RECTANGULARPARALLELEPIPED_H
+
 class RectangularParallelepiped{
 	float _L_1;
 	float _L_2;
@@ -9,3 +12,5 @@ public:
 	float getL2();
 	float getL3();
 };
+
+#endif

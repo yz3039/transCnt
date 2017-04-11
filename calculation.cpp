@@ -2,13 +2,6 @@
 #include <tr1/cmath>
 #include "constant.h"
 #include "calculation.h"
-#include "sphere.h"
-#include "planewall.h"
-#include "infinitecylinder.h"
-#include "rectangularparallelepiped.h"
-#include "cylinder.h"
-#include "infiniterectangularbar.h"
-#include "semiinfiniteplate.h"
 
 extern const float PI = 3.14159265;
 
@@ -78,10 +71,7 @@ float planewall_lumped_cap_at_time(PlaneWall w, float density, float h, float c,
 }
 
 float sphere_lumped_cap_at_time(Sphere s, float density, float h, float c, float time, float t_init, float t_inf){
-	float vol = s.getVolumn();
-	float surface_area = s.getSurfaceArea();
-
-	float theta = exp(-h*surface_area*time/(density*vol*c));
+	float theta = exp(-h*3*time/(density*s.getRadius()*c));
 	return theta*(t_init-t_inf)+t_inf;
 }
 

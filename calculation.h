@@ -1,15 +1,22 @@
 #include <vector>
 #include <string>
+#include "planewall.h"
+#include "infinitecylinder.h"
+#include "rectangularparallelepiped.h"
+#include "cylinder.h"
+#include "infiniterectangularbar.h"
+#include "semiinfiniteplate.h"
+#include "sphere.h"
 
 using namespace std;
 
-class Sphere;
-class PlaneWall;
-class InfiniteCylinder;
-class RectangularParallelepiped;
-class Cylinder;
-class InfiniteRectangularBar;
-class SemiInfinitePlate;
+//class Sphere;
+//class PlaneWall;
+// class InfiniteCylinder;
+// class RectangularParallelepiped;
+// class Cylinder;
+// class InfiniteRectangularBar;
+// class SemiInfinitePlate;
 
 extern const float PI;
 
