@@ -34,18 +34,30 @@ int main(){
     // output = temp_at_time_at_point(s4, mat, envmat, 0.05, 100, t_init, t_inf);
     // cout << output << endl;
 
+    InfiniteCylinder ic1 = InfiniteCylinder(0.001);
+    output = temp_at_time_at_point(ic1, mat, envmat, 0.0005, 10, t_init, t_inf);
+    cout << output << endl;
+
+    InfiniteCylinder ic2 = InfiniteCylinder(0.01);
+    output = temp_at_time_at_point(ic2, mat, envmat, 0.005, 10, t_init, t_inf);
+    cout << output << endl;
+
+    InfiniteCylinder ic3 = InfiniteCylinder(0.1);
+    output = temp_at_time_at_point(ic3, mat, envmat, 0.05, 100, t_init, t_inf);
+    cout << output << endl;
+
 
     // PlaneWall pl = PlaneWall(0.001);
     // output = temp_at_time_at_point(pl, mat, envmat, 0.0005, 10, t_init, t_inf);
     // cout << output << endl;
 
-    PlaneWall pl2 = PlaneWall(0.01);
-    output = temp_at_time_at_point(pl2, mat, envmat, 0.005, 10, t_init, t_inf);
-    cout << output << endl;
+    // PlaneWall pl2 = PlaneWall(0.01);
+    // output = temp_at_time_at_point(pl2, mat, envmat, 0.005, 10, t_init, t_inf);
+    // cout << output << endl;
 
-    PlaneWall pl3 = PlaneWall(0.1);
-    output = temp_at_time_at_point(pl3, mat, envmat, 0.05, 100, t_init, t_inf);
-    cout << output << endl;
+    // PlaneWall pl3 = PlaneWall(0.1);
+    // output = temp_at_time_at_point(pl3, mat, envmat, 0.05, 100, t_init, t_inf);
+    // cout << output << endl;
 
     // InfiniteCylinder ic = InfiniteCylinder(0.001);
     // output = temp_at_time_at_point(ic, mat, envmat, 0.0005, 10, t_init, t_inf);

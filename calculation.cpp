@@ -7,6 +7,7 @@
 extern const float PI = 3.14159265;
 float RATIO = 0.003;
 float PRECESION = 0.001;
+vector<float> J0zeros = {0, 2.4048, 5.5201, 8.6537, 11.7915, 14.9309};
 
 float biot(float h, float k, float x){
 	return h*x/k;
@@ -20,8 +21,20 @@ float calculate_alpha(float k, float density, float c){
     return k/(density*c);
 }
 
+// only support n <= 6
 float cylinder_solve_for_zeta(float biot, int n){
-    // how to determine the range?
+    float min = J0zeros[n-1];
+    float max = J0zeros[n];
+    float x;
+    float fx;
+    while(true){
+        x = (min+max)/2;
+        fx = x*std::tr1::cyl_bessel_j(1,x)/std::tr1::cyl_bessel_j(0,x);
+        if(abs(fx-biot)<PRECESION) return x;
+        if(fx<biot) min = x;
+        else max = x;
+    }
+    return -1;
 }
 
 float planewall_solve_for_zeta(float biot, int n){
@@ -82,7 +95,7 @@ float infinitecylinder_one_term_at_time_at_point(float fourier, float biot, floa
     float zeta = cylinder_solve_for_zeta(biot,1);
     float j0 = std::tr1::cyl_bessel_j(0,zeta);
     float j1 = std::tr1::cyl_bessel_j(1,zeta);
-    float c1 = 2*j0/(zeta*(j0*j0+j1*j1));
+    float c1 = 2*j1/(zeta*(j0*j0+j1*j1));
     float theta = c1*exp(-zeta*zeta*fourier)*std::tr1::cyl_bessel_j(0,zeta*r/r0);
     return theta*(t_init-t_inf)+t_inf;
 }
@@ -114,7 +127,7 @@ float infinitecylinder_multiple_term_at_time_at_point(float fourier, float biot,
         zeta_n = cylinder_solve_for_zeta(biot, n);
         j0 = std::tr1::cyl_bessel_j(0,zeta_n);
         j1 = std::tr1::cyl_bessel_j(1,zeta_n);
-        c_n = 2*j0/(zeta_n*(j0*j0+j1*j1));
+        c_n = 2*j1/(zeta_n*(j0*j0+j1*j1));
         if(n>1){
             float ratio = abs(c_n*exp(-zeta_n*zeta_n*fourier)/(c_n_1*exp(-zeta_n_1*zeta_n_1*fourier)));
             if(ratio < RATIO) break;
